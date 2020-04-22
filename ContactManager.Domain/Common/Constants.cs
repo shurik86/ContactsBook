@@ -7,6 +7,6 @@
         public const int MaxPhoneNumberLength = 12;
         public const int MaxEmailLength = 70;
 
-        public const string DefaultDatabasePath = "contacts.db";
+        public const string DefaultConnectionString = "contacts.db";
     }
 }

@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Configuration;
 using ContactsBook.Domain.Models;
 using ContactsBook.Domain.Repositories.Interfaces;
 using ContactsBook.Infrastructure.Repositories;
+using ContactsBook.Ui.Views;
 using ContactsBook.Ui.Views.Base;
 using Microsoft.Extensions.DependencyInjection;
-using ContactEditorView = ContactsBook.Ui.Views.ContactEditorView;
 
 namespace ContactsBook.Ui.ViewModels
 {
@@ -21,6 +22,7 @@ namespace ContactsBook.Ui.ViewModels
 
         private void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(new DatabaseSettings { ConnectionString = ConfigurationManager.ConnectionStrings["sqlite"].ConnectionString });
             services.AddSingleton<IContactsRepository, SQLiteContactsRepository>();
             services.AddSingleton<MainWindowViewModel>();
             services.AddTransient<EditorBase<Contact>, ContactEditorView>();

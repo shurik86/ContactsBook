@@ -14,9 +14,8 @@ namespace ContactsBook.Infrastructure.Repositories
 
         public SQLiteContactsRepository(DatabaseSettings settings)
         {
-            var path = @"d:\contacts.db";
             m_DataContext = new SQLiteAsyncConnection(settings.ConnectionString, Flags);
-            if (!File.Exists(path))
+            if (!File.Exists(settings.ConnectionString))
             {
                 m_DataContext.CreateTableAsync<Contact>();
             }
