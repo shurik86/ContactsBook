@@ -21,7 +21,7 @@
             <Style TargetType="{x:Type TextBox}">
                 <Setter Property="Validation.ErrorTemplate" Value="{DynamicResource ValidationErrorTemplate}" />
                 <Setter Property="HorizontalAlignment" Value="Left" />
-                <Setter Property="VerticalAlignment" Value="Top" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
                 <Setter Property="Width" Value="150" />
                 <Setter Property="Height" Value="30" />
             </Style>
@@ -46,6 +46,7 @@
             Grid.Column="1" 
             Grid.Row="2" 
             Height="26" 
+
             Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
             MaxLength="{x:Static common:Constants.MaxSurnameLength}"/>
 

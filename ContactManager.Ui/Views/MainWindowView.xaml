@@ -5,21 +5,21 @@
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     Title="MainWindowView" 
     Height="400" 
-    Width="700"
+    Width="800"
     DataContext="{Binding MainModel, Source={StaticResource Locator}}">
     <b:Interaction.Triggers>
         <b:EventTrigger EventName="Loaded">
             <b:InvokeCommandAction Command="{Binding LoadCommand}" />
         </b:EventTrigger>
     </b:Interaction.Triggers>
-    <StackPanel Orientation="Vertical" Width="680" Margin="10">
+    <StackPanel Orientation="Vertical" Width="780" Margin="10">
         <StackPanel Orientation="Horizontal">
-            <TextBox Height="26" Width="250" Margin="3" Text="{Binding FilterString, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <TextBox Height="26" Width="350" Margin="3" Text="{Binding FilterString, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <Button Height="26" Width="75" Margin="3" Command="{Binding LoadCommand}">Search</Button>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Height="300">
             <DataGrid
-                Width="590"
+                Width="690"
                 ItemsSource="{Binding Contacts}" 
                 SelectedItem="{Binding SelectedContact}"
                 SelectionMode="Single" 
@@ -28,7 +28,7 @@
                     <DataGridTextColumn Header="Name" Binding="{Binding Path=Name}" Width="130" />
                     <DataGridTextColumn Header="Surname" Binding="{Binding Path=Surname}" Width="175" />
                     <DataGridTextColumn Header="Phone number" Binding="{Binding Path=PhoneNumber}" Width="100" />
-                    <DataGridTextColumn Header="Email" Binding="{Binding Path=Email}" Width="175" />
+                    <DataGridTextColumn Header="Email" Binding="{Binding Path=Email}" Width="250" />
                 </DataGrid.Columns>
             </DataGrid>
             <StackPanel Orientation="Vertical" Width="75">
