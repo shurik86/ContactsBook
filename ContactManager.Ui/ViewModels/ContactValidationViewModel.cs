@@ -76,7 +76,9 @@ namespace ContactsBook.Ui.ViewModels
                                         IsPhoneNumberValid && 
                                         (string.IsNullOrWhiteSpace(Email) || IsEmailValid);
 
-        /// <summary>Gets the error message for the property with the given name.</summary>
+        /// <summary>
+        /// Gets the error message for the property with the given name.
+        /// </summary>
         /// <param name="columnName">The name of the property whose error message to get.</param>
         /// <returns>The error message for the property. The default is an empty string ("").</returns>
         public override string this[string columnName]
