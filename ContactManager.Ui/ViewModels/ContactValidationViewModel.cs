@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using ContactsBook.Domain.Models;
+using ContactsBook.Domain.Utils;
 
 namespace ContactsBook.Ui.ViewModels
 {
@@ -79,17 +82,36 @@ namespace ContactsBook.Ui.ViewModels
         public override string this[string columnName]
         {
 			get
-			{
-                Error = columnName switch
-                            {
-                                "Name" when string.IsNullOrWhiteSpace(Name) => "Name is required!",
-                                "PhoneNumber" when string.IsNullOrWhiteSpace(PhoneNumber) => "Phone number is required!",
-                                "PhoneNumber" when !IsPhoneNumberValid => "Please enter valid phone number!",
-                                "Email" when !string.IsNullOrWhiteSpace(Email) && !IsEmailValid => "Please enter valid email address!",
-                                _ => string.Empty
-                            };
+            {
+                Error = string.Empty;
+
+                if (IsColumn(columnName, () => Name) && string.IsNullOrWhiteSpace(Name))
+                {
+                    Error = "Name is required!";
+                }
+                else if (IsColumn(columnName, () => PhoneNumber))
+                {
+                    if (string.IsNullOrWhiteSpace(PhoneNumber))
+                    {
+                        Error = "Phone number is required!";
+                    }
+                    else if (!IsPhoneNumberValid)
+                    {
+                        Error = "Please enter valid phone number!";
+                    }
+                }
+                else if (IsColumn(columnName, () => Email) && !string.IsNullOrWhiteSpace(Email) && !IsEmailValid)
+                {
+                    Error = "Please enter valid email address!";
+                }
+                
                 return Error;
             }
 		}
+
+        private static bool IsColumn<T>(string columnName, Expression<Func<T>> expression)
+        {
+            return PropertyNameProvider.GetPropertyName(expression).Equals(columnName, StringComparison.Ordinal);
+        }
     }
 }

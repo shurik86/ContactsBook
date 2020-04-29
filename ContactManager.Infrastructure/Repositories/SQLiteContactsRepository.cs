@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using ContactsBook.Domain.Models;
 using ContactsBook.Domain.Repositories.Interfaces;
+using ContactsBook.Infrastructure.Utils;
 using SQLite;
 
 namespace ContactsBook.Infrastructure.Repositories
@@ -15,10 +16,7 @@ namespace ContactsBook.Infrastructure.Repositories
         public SQLiteContactsRepository(DatabaseSettings settings)
         {
             m_DataContext = new SQLiteAsyncConnection(settings.ConnectionString, Flags);
-            if (!File.Exists(settings.ConnectionString))
-            {
-                m_DataContext.CreateTableAsync<Contact>();
-            }
+            InitializeDatabaseAsync(settings.ConnectionString).SafeFireAndForget(false);
         }
 
         /// <summary>
@@ -42,7 +40,7 @@ namespace ContactsBook.Infrastructure.Repositories
                                                   c.Surname.Contains(searchString) ||
                                                   c.PhoneNumber.Contains(searchString) ||
                                                   c.Email.Contains(searchString))
-                                      .ToListAsync();
+                                      .ToListAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -50,7 +48,7 @@ namespace ContactsBook.Infrastructure.Repositories
         /// </summary>
         private async Task<IEnumerable<Contact>> GetAllWithoutFilterAsync()
         {
-            return await m_DataContext.Table<Contact>().ToListAsync();
+            return await m_DataContext.Table<Contact>().ToListAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -58,7 +56,7 @@ namespace ContactsBook.Infrastructure.Repositories
         /// </summary>
         public async Task AddAsync(Contact contact)
         {
-            await m_DataContext.InsertAsync(contact);
+            await m_DataContext.InsertAsync(contact).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -66,7 +64,7 @@ namespace ContactsBook.Infrastructure.Repositories
         /// </summary>
         public async Task UpdateAsync(Contact contact)
         {
-            await m_DataContext.UpdateAsync(contact);
+            await m_DataContext.UpdateAsync(contact).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -74,8 +72,16 @@ namespace ContactsBook.Infrastructure.Repositories
         /// </summary>
         public async Task DeleteAsync(int id)
         {
-            var noteItem = await m_DataContext.Table<Contact>().FirstOrDefaultAsync(n => n.Id == id);
-            await m_DataContext.DeleteAsync(noteItem);
+            var noteItem = await m_DataContext.Table<Contact>().FirstOrDefaultAsync(n => n.Id == id).ConfigureAwait(false); ;
+            await m_DataContext.DeleteAsync(noteItem).ConfigureAwait(false); ;
+        }
+
+        private async Task InitializeDatabaseAsync(string database)
+        {
+            if (!File.Exists(database))
+            {
+                await m_DataContext.CreateTableAsync<Contact>().ConfigureAwait(false);
+            }
         }
     }
 }
